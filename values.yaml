@@ -15,7 +15,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 pgAdminCredentials:
-  username: "swdpgadmin"
+  username: "pgadmin@domain.com"
   password: "SuperSecret"
 
 serviceAccount:
