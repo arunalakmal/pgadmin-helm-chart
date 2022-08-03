@@ -1,1 +1,1 @@
-# pgadmin-helm-chart
+# pgAdmin Helm Chart
