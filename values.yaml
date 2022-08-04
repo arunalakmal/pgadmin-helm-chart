@@ -44,6 +44,10 @@ service:
   type: ClusterIP
   port: 80
 
+storage:
+  size: "100Mi"
+  storageClassName: ""
+
 ingress:
   enabled: false
   annotations: {}
