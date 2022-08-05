@@ -63,7 +63,7 @@ ingress:
 
 #This is to enable the OpenShift Route creation. 
 route:
-  enabled: true
+  enabled: false
   annotations: {}
   host: chart-example.local
   tls:
