@@ -1,0 +1,26 @@
+{{- if .Values.route.enabled -}}
+{{- $fullName := include "swdpgadmin.fullname" . -}}
+{{- $hostName := printf "%s.%s" $fullName .Values.route.host -}}
+{{- $svcPort := .Values.service.port -}}
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "swdpgadmin.labels" . | nindent 4 }}
+  {{- with .Values.route.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  host: {{ $hostName }}
+  to:
+    kind: Service
+    name: {{ $fullName }}
+    weight: 100
+  port:
+    targetPort: {{ $svcPort }}
+  tls:
+    termination: {{ .Values.route.tls.termination }}
+  wildcardPolicy: {{ .Values.route.wildcardPolicy }}
+{{- end }}
