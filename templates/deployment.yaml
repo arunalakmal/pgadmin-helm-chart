@@ -47,12 +47,12 @@ spec:
             - name: PGADMIN_DEFAULT_EMAIL
               valueFrom:
                 secretKeyRef:
-                  name: swdpgadmin
+                  name: {{ include "swdpgadmin.fullname" . }}
                   key: username
             - name: PGADMIN_DEFAULT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: swdpgadmin
+                  name: {{ include "swdpgadmin.fullname" . }}
                   key: password
           ports:
             - name: http
