@@ -45,6 +45,8 @@ service:
   port: 80
 
 storage:
+  enabled: false
+  existingClaim: ""
   size: "100Mi"
   storageClassName: ""
 

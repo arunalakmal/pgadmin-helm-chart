@@ -32,8 +32,11 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
         - name: pgadmin
+        {{- if .Values.storage.enabled }}
           persistentVolumeClaim:
-            claimName: {{ include "swdpgadmin.fullname" . }}
+            claimName: {{ if .Values.storage.existingClaim }}{{ .Values.storage.existingClaim }}{{- else }}{{ include "swdpgadmin.fullname" . }}{{- end }}
+        {{- else }}
+          emptyDir: {}{{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -44,12 +47,12 @@ spec:
             - name: PGADMIN_DEFAULT_EMAIL
               valueFrom:
                 secretKeyRef:
-                  name: swdpgadmin
+                  name: {{ include "swdpgadmin.fullname" . }}
                   key: username
             - name: PGADMIN_DEFAULT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: swdpgadmin
+                  name: {{ include "swdpgadmin.fullname" . }}
                   key: password
           ports:
             - name: http
