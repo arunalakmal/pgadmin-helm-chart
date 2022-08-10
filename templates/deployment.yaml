@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "swdpgadmin.fullname" . }}
+  name: {{ include "pgadmin.fullname" . }}
   labels:
-    {{- include "swdpgadmin.labels" . | nindent 4 }}
+    {{- include "pgadmin.labels" . | nindent 4 }}
 spec:
   strategy:
     type: Recreate
@@ -12,7 +12,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "swdpgadmin.selectorLabels" . | nindent 6 }}
+      {{- include "pgadmin.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -20,21 +20,21 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "swdpgadmin.selectorLabels" . | nindent 8 }}
+        {{- include "pgadmin.selectorLabels" . | nindent 8 }}
         helm-revision: "{{ .Release.Revision }}"
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "swdpgadmin.serviceAccountName" . }}
+      serviceAccountName: {{ include "pgadmin.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
         - name: pgadmin
         {{- if .Values.storage.enabled }}
           persistentVolumeClaim:
-            claimName: {{ if .Values.storage.existingClaim }}{{ .Values.storage.existingClaim }}{{- else }}{{ include "swdpgadmin.fullname" . }}{{- end }}
+            claimName: {{ if .Values.storage.existingClaim }}{{ .Values.storage.existingClaim }}{{- else }}{{ include "pgadmin.fullname" . }}{{- end }}
         {{- else }}
           emptyDir: {}{{- end }}
       containers:
@@ -47,12 +47,12 @@ spec:
             - name: PGADMIN_DEFAULT_EMAIL
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "swdpgadmin.fullname" . }}
+                  name: {{ include "pgadmin.fullname" . }}
                   key: username
             - name: PGADMIN_DEFAULT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "swdpgadmin.fullname" . }}
+                  name: {{ include "pgadmin.fullname" . }}
                   key: password
           ports:
             - name: http
