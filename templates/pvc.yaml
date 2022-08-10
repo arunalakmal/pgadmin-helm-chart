@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "swdpgadmin.fullname" . }}
+  name: {{ include "pgadmin.fullname" . }}
 spec:
   accessModes:
     - ReadWriteOnce

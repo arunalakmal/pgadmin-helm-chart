@@ -1,5 +1,5 @@
 {{- if .Values.route.enabled -}}
-{{- $fullName := include "swdpgadmin.fullname" . -}}
+{{- $fullName := include "pgadmin.fullname" . -}}
 {{- $hostName := printf "%s.%s" $fullName .Values.route.host -}}
 {{- $svcPort := .Values.service.port -}}
 kind: Route
@@ -7,7 +7,7 @@ apiVersion: route.openshift.io/v1
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "swdpgadmin.labels" . | nindent 4 }}
+    {{- include "pgadmin.labels" . | nindent 4 }}
   {{- with .Values.route.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
