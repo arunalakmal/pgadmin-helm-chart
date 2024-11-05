@@ -57,7 +57,8 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   hosts:
     - host: chart-example.local
-      paths: []
+      paths: 
+        - path: "/"
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -125,9 +126,9 @@ customConfig:
             'OAUTH2_DISPLAY_NAME': 'Azure',
             'OAUTH2_CLIENT_ID': os.environ['OAUTH2_CLIENT_ID'],
             'OAUTH2_CLIENT_SECRET': os.environ['OAUTH2_CLIENT_SECRET'],
-            'OAUTH2_TOKEN_URL': 'https://login.microsoftonline.com/dec5745e-43d6-4633-bb47-d583019de262/oauth2/v2.0/token',
-            'OAUTH2_AUTHORIZATION_URL': 'https://login.microsoftonline.com/dec5745e-43d6-4633-bb47-d583019de262/oauth2/v2.0/authorize',
-            'OAUTH2_SERVER_METADATA_URL': 'https://login.microsoftonline.com/dec5745e-43d6-4633-bb47-d583019de262/v2.0/.well-known/openid-configuration',
+            'OAUTH2_TOKEN_URL': 'https://login.microsoftonline.com/dec5745e-43d6-4633-xxxx-d583019de262/oauth2/v2.0/token',
+            'OAUTH2_AUTHORIZATION_URL': 'https://login.microsoftonline.com/dec5745e-43d6-4633-xxxx-d583019de262/oauth2/v2.0/authorize',
+            'OAUTH2_SERVER_METADATA_URL': 'https://login.microsoftonline.com/dec5745e-43d6-4633-xxxx-d583019de262/v2.0/.well-known/openid-configuration',
             'OAUTH2_API_BASE_URL': 'https://graph.microsoft.com/v1.0/',
             'OAUTH2_USERINFO_ENDPOINT': 'me',
             'OAUTH2_SCOPE': 'User.Read openid email profile',
