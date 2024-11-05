@@ -31,6 +31,11 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
+        {{- if .Values.customConfig.enabled }}
+        - name: {{ .Release.Name }}-custom-settings
+          configMap:
+            name: {{ include "pgadmin.fullname" . }}-custom-settings
+        {{- end }}
         - name: pgadmin
         {{- if .Values.storage.enabled }}
           persistentVolumeClaim:
@@ -54,11 +59,19 @@ spec:
                 secretKeyRef:
                   name: {{ include "pgadmin.fullname" . }}
                   key: password
+          {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 80
               protocol: TCP
           volumeMounts:
+            {{- if .Values.customConfig.enabled }}
+            - name: {{ .Release.Name }}-custom-settings
+              mountPath: /pgadmin4/config_local.py
+              subPath: config_local.py
+            {{- end }}
             - name: pgadmin
               mountPath: "/var/lib/pgadmin"
           resources:

@@ -8,7 +8,7 @@ image:
   repository: dpage/pgadmin4
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "6.12"
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -84,6 +84,17 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+env: 
+  - name: PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION
+    value: "False"
+  - name: PGADMIN_CONFIG_WTF_CSRF_ENABLED
+    value: "False"
+  # - name: PGADMIN_DEFAULT_EMAIL
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: secret
+  #       key: username
+
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -96,3 +107,38 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+customConfig:
+  enabled: true
+  config: |-
+    import builtins
+    import logging
+    import os
+    import sys
+    from collections import OrderedDict
+
+    OAUTH2_AUTO_CREATE_USER = True
+    MASTER_PASSWORD_REQUIRED = False
+    AUTHENTICATION_SOURCES = ['oauth2']
+    OAUTH2_CONFIG = [
+        {
+            'OAUTH2_NAME': 'azure',
+            'OAUTH2_DISPLAY_NAME': 'Azure',
+            'OAUTH2_CLIENT_ID': os.environ['OAUTH2_CLIENT_ID'],
+            'OAUTH2_CLIENT_SECRET': os.environ['OAUTH2_CLIENT_SECRET'],
+            'OAUTH2_TOKEN_URL': 'https://login.microsoftonline.com/dec5745e-43d6-4633-bb47-d583019de262/oauth2/v2.0/token',
+            'OAUTH2_AUTHORIZATION_URL': 'https://login.microsoftonline.com/dec5745e-43d6-4633-bb47-d583019de262/oauth2/v2.0/authorize',
+            'OAUTH2_SERVER_METADATA_URL': 'https://login.microsoftonline.com/dec5745e-43d6-4633-bb47-d583019de262/v2.0/.well-known/openid-configuration',
+            'OAUTH2_API_BASE_URL': 'https://graph.microsoft.com/v1.0/',
+            'OAUTH2_USERINFO_ENDPOINT': 'me',
+            'OAUTH2_SCOPE': 'User.Read openid email profile',
+            'OAUTH2_USERNAME_CLAIM': None,
+            'OAUTH2_ICON': 'fa-microsoft',
+            'OAUTH2_BUTTON_COLOR': '#0000ff',
+            'OAUTH2_ADDITIONAL_CLAIMS': {
+                'groups': ["83d1fe54-fa1c-464f-94e7-6aa0720e38e8"],
+                # 'wids': ["cf1c38e5-3621-4004-a7cb-879624dced7c"],
+              },
+            'OAUTH2_SSL_CERT_VERIFICATION': True,
+            'OAUTH2_LOGOUT_URL': None
+        }
+    ]
