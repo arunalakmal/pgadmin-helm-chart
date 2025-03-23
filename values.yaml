@@ -110,7 +110,7 @@ tolerations: []
 
 affinity: {}
 customConfig:
-  enabled: true
+  enabled: false
   config: |-
     import builtins
     import logging
